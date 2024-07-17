@@ -1,23 +1,25 @@
 'use client';
 
-import { useState } from "react";
-import { LuMenu } from "react-icons/lu";
 import SideDrawer from "@/components/SideDrawer";
+import useToggle from "@/hooks/useToggle";
+import Navbar from "@/components/Navbar";
+import Note from "@/components/Note";
 
 export default function Home() {
-  const [toggle, setToggle] = useState(false);
-
-  const toggler = () => {
-    setToggle(prevState => !prevState);
-  }
+  const sideDrawer = useToggle();
 
   return (
     <>
-      <div className="w-screen p-4 flex items-center">
-        <LuMenu className="size-8" onClick={toggler} />
-        <h1 className="m-auto text-2xl select-none">Pastel Notes</h1>
+      <SideDrawer toggle={sideDrawer.toggle} toggler={sideDrawer.toggler} />
+      <Navbar sideDrawerToggler={sideDrawer.toggler} />
+
+      <div className="flex flex-wrap justify-center gap-4 mt-16">
+        <Note title="Some Title" body="Some body..." />
+        <Note title="Some Title" body="Some body..." />
+        <Note title="Some Title" body="Some body..." />
+        <Note title="Some Title" body="Some body..." />
+        <Note title="Some Title" body="Some body..." />
       </div>
-      <SideDrawer toggle={toggle} toggler={toggler} />
     </>
   )
 }
