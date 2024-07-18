@@ -15,19 +15,19 @@ const Menu = () => {
 
   return (
     <ul className="h-auto flex flex-col flex-1">
-      <li className="p-4 hover:bg-gray-100 text-lg flex items-center">
+      <li className="p-4 hover:bg-gray-100 text-lg flex items-center select-none">
         <FaRegNoteSticky className="mr-2" />
         Notes
       </li>
-      <li className="p-4 hover:bg-gray-100 text-lg flex items-center">
+      <li className="p-4 hover:bg-gray-100 text-lg flex items-center select-none">
         <LuArchive className="mr-2" />
         Archive
       </li>
-      <li className="p-4 hover:bg-gray-100 text-lg flex items-center">
+      <li className="p-4 hover:bg-gray-100 text-lg flex items-center select-none">
         <LuTrash className="mr-2" />
         Trash
       </li>
-      <li className="p-4 hover:bg-gray-100 text-lg mt-auto flex items-center">
+      <li className="p-4 hover:bg-gray-100 text-lg mt-auto flex items-center select-none">
         <LuLogOut className="mr-2" />
         Logout
       </li>
