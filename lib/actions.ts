@@ -3,6 +3,8 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import bcrypt from "bcryptjs";
 import prisma from "./db";
+import { auth, signIn, signOut } from "@/lib/auth";
+import { CredentialsSignin } from "next-auth";
 import { redirect } from "next/navigation";
 
 export async function register(prevState: any, formData: FormData) {
@@ -37,34 +39,31 @@ export async function register(prevState: any, formData: FormData) {
   }
 }
 
-export async function login(prevState: any, formData: FormData) {
+export async function authSignIn(formData: FormData) {
   try {
-    const res = await prisma.user.findUnique({
-      where: {
-        email: formData.get("email") as string,
-      },
-    });
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
 
-    if (res) {
-      const password = formData.get("password") as string;
-
-      if (await bcrypt.compare(password, res.password)) {
-        return {
-          success: true,
-          message: "User authenticated successfully",
-        };
-      }
-    }
-
-    return {
-      success: false,
-      message: "Invalid credentials",
-    };
+    await signIn("credentials", { email, password, redirect: false });
+    console.log("hello");
   } catch (error) {
-    console.log(error);
-    return {
-      success: false,
-      message: "Error occurred",
-    };
+    if (error instanceof CredentialsSignin) {
+      console.log("=====================================================");
+
+      console.log(error.message);
+    }
   }
+}
+
+export async function authSignOut() {
+  await signOut();
+}
+
+export async function getSession() {
+  const session = await auth();
+  return session;
+}
+
+export async function redirectTo(path: string) {
+  redirect(path);
 }

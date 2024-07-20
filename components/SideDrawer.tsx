@@ -1,5 +1,7 @@
+import { signOut } from "next-auth/react";
 import { FaRegNoteSticky } from "react-icons/fa6";
 import { LuArrowLeftToLine, LuArchive, LuTrash, LuLogOut } from "react-icons/lu";
+
 
 const SideDrawer = ({ toggle, toggler }: { toggle: boolean, toggler: () => void }) => {
 
@@ -12,7 +14,6 @@ const SideDrawer = ({ toggle, toggler }: { toggle: boolean, toggler: () => void 
 }
 
 const Menu = () => {
-
   return (
     <ul className="h-auto flex flex-col flex-1">
       <li className="p-4 hover:bg-gray-100 text-lg flex items-center select-none">
@@ -27,7 +28,7 @@ const Menu = () => {
         <LuTrash className="mr-2" />
         Trash
       </li>
-      <li className="p-4 hover:bg-gray-100 text-lg mt-auto flex items-center select-none">
+      <li className="p-4 hover:bg-gray-100 text-lg mt-auto flex items-center select-none" onClick={() => signOut()}>
         <LuLogOut className="mr-2" />
         Logout
       </li>

@@ -1,29 +1,43 @@
 'use client';
 
-import { login } from "@/lib/actions";
-import { redirect } from "next/navigation";
-import { useEffect } from "react";
-import { useFormStatus, useFormState } from "react-dom";
-import toast, { Toaster } from "react-hot-toast";
+import { getSession, redirectTo } from "@/lib/actions";
+import { useEffect, useState } from "react";
+import { useFormStatus } from "react-dom";
+import { Toaster } from "react-hot-toast";
 import { BarLoader } from "react-spinners";
+import { authSignIn } from "@/lib/actions";
 
 export default function SigninForm() {
-  const [state, formAction] = useFormState(login, undefined);
+  const [authenticated, setAuthenticated] = useState({ pending: true, value: false, redirect: false });
 
   useEffect(() => {
-    if (state && !state.success && state.message) {
-      toast.error(state.message);
-    }
+    getSession().then((session) => {
+      if (session) {
+        setAuthenticated({ pending: false, value: true, redirect: true });
+      } else {
+        setAuthenticated({ pending: false, value: false, redirect: false });
+      }
+    });
+  }, []);
 
-    if (state && state.success) {
-      redirect("/");
+  useEffect(() => {
+    if (authenticated.redirect) {
+      redirectTo("/");
     }
-  }, [state]);
+  }, [authenticated.redirect]);
+
+  if (authenticated.pending || authenticated.redirect) {
+    return (
+      <div className="flex justify-center mt-8">
+        <BarLoader />
+      </div>
+    )
+  }
 
   return (
     <>
       <Toaster />
-      <form action={formAction}>
+      <form action={authSignIn}>
         <FormContent />
       </form>
     </>
