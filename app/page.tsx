@@ -6,30 +6,44 @@ import Navbar from "@/components/Navbar";
 import Note from "@/components/Note";
 import { useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
-import { getSession, redirectTo } from "@/lib/actions";
+import { getSession, redirectTo, getUserNotes } from "@/lib/actions";
 
+
+type Note = {
+  id: string;
+  title: string;
+  content: string;
+}
 
 export default function Home() {
-  const [authenticated, setAuthenticated] = useState({ pending: true, value: false, redirect: false });
+  const [authenticated, setAuthenticated] = useState(false);
+  const [notes, setNotes] = useState<Note[]>([]);
+
   const sideDrawer = useToggle();
 
+  // Auth check
   useEffect(() => {
     getSession().then((session) => {
-      if (session) {
-        setAuthenticated({ pending: false, value: true, redirect: false });
+
+      // If session is available, set authenticated to true and fetch user notes
+      if (session && session.user) {
+        setAuthenticated(true);
+        console.log('session:', session.user);
+
+        getUserNotes(session.user.id as string).then((notes) => {
+          console.log('notes:', notes);
+          setNotes(notes);
+        });
+
       } else {
-        setAuthenticated({ pending: false, value: false, redirect: true });
+        redirectTo("/signin");
       }
     });
   }, []);
 
-  useEffect(() => {
-    if (authenticated.redirect) {
-      redirectTo("/signin");
-    }
-  }, [authenticated.redirect]);
 
-  if (authenticated.pending || authenticated.redirect) {
+  // Loading spinner
+  if (!authenticated) {
     return (
       <div className="h-screen flex justify-center items-center">
         <BarLoader />
@@ -43,11 +57,9 @@ export default function Home() {
       <Navbar sideDrawerToggler={sideDrawer.toggler} />
 
       <div className="flex flex-wrap justify-center gap-4 mt-16">
-        <Note title="Some Title" body="Some body..." />
-        <Note title="Some Title" body="Some body..." />
-        <Note title="Some Title" body="Some body..." />
-        <Note title="Some Title" body="Some body..." />
-        <Note title="Some Title" body="Some body..." />
+        {notes.map((note) => (
+          <Note key={note.id} title={note.title} body={note.content} />
+        ))}
       </div>
     </>
   )

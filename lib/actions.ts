@@ -44,7 +44,7 @@ export async function authSignIn(formData: FormData) {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    await signIn("credentials", { email, password, redirect: false });
+    await signIn("credentials", { email, password, redirectTo: "/signup" });
     console.log("hello");
   } catch (error) {
     if (error instanceof CredentialsSignin) {
@@ -66,4 +66,16 @@ export async function getSession() {
 
 export async function redirectTo(path: string) {
   redirect(path);
+}
+
+export async function getUserNotes(userId: string) {
+  const notes = await prisma.note.findMany({
+    where: {
+      authorId: userId,
+    },
+  });
+
+  console.log("notes:", notes);
+
+  return notes;
 }

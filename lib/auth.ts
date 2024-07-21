@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import prisma from "./db";
@@ -24,7 +24,7 @@ const providers: Provider[] = [
 
       if (!user) {
         console.log("Invalid credentials");
-        // throw new Error("User not found");
+        throw new CredentialsSignin("Invalid credentials");
       }
 
       return user;
@@ -45,6 +45,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers,
   pages: {
     signIn: "/signin",
+  },
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+
+    session({ session, token }) {
+      session.user.id = token.id as string;
+
+      return session;
+    },
   },
 });
 
