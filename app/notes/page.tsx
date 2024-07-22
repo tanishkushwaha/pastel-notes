@@ -1,10 +1,11 @@
 'use client';
 
 import Note from "@/components/Note";
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
 import { getSession, redirectTo, getUserNotes } from "@/lib/actions";
 import AddNoteButton from "@/components/AddNoteButton";
+import { UpdateProvider } from "@/contexts/useUpdate";
 
 
 type Note = {
@@ -18,6 +19,7 @@ export default function Notes() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [update, setUpdate] = useState(false);
 
+
   // Auth check
   useEffect(() => {
     getSession().then((session) => {
@@ -25,10 +27,7 @@ export default function Notes() {
       // If session is available, set authenticated to true and fetch user notes
       if (session && session.user) {
         setAuthenticated(true);
-        console.log('session:', session.user);
-
         getUserNotes(session.user.id as string).then((notes) => {
-          console.log('notes:', notes);
           setNotes(notes);
         });
 
@@ -47,7 +46,6 @@ export default function Notes() {
         });
       });
 
-      console.log("There's an update!");
       setUpdate(false);
     }
   }, [update]);
@@ -64,12 +62,14 @@ export default function Notes() {
 
   return (
     <>
-      <div className="flex flex-wrap justify-center gap-4 mt-16">
-        {notes.map((note) => (
-          <Note key={note.id} id={note.id} title={note.title} body={note.content} setUpdate={setUpdate} />
-        ))}
-      </div>
-      <AddNoteButton />
+      <UpdateProvider value={{ update, setUpdate }}>
+        <div className="flex flex-wrap justify-center gap-4 mt-16">
+          {notes.map((note) => (
+            <Note key={note.id} id={note.id} title={note.title} body={note.content} />
+          ))}
+        </div>
+        <AddNoteButton />
+      </UpdateProvider>
     </>
   )
 }
