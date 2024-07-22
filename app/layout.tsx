@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
 
 const kollektif = localFont({
   src: "../public/Kollektif.ttf",
@@ -23,9 +24,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
-      <body className={kollektif.className}>{children}</body>
+      <body className={kollektif.className}>
+        <Navbar />
+        {children}
+      </body>
     </html>
   );
 }

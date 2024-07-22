@@ -1,10 +1,17 @@
-import { LuMenu } from "react-icons/lu";
+'use client';
 
-export default function Navbar({ sideDrawerToggler }: { sideDrawerToggler: () => void }) {
+import useDisclosure from "@/hooks/useDisclosure";
+import Header from "./Header";
+import SideDrawer from "./SideDrawer";
+
+
+export default function Navbar() {
+  const sideDrawer = useDisclosure();
+
   return (
-    <div className="flex items-center p-4">
-      <LuMenu className="size-8" onClick={sideDrawerToggler} />
-      <h1 className="text-2xl mx-auto select-none">Pastel Notes</h1>
-    </div>
+    <>
+      <SideDrawer open={sideDrawer.open} onClose={sideDrawer.onClose} />
+      <Header sideDrawerOpener={sideDrawer.onOpen} />
+    </>
   )
 }
