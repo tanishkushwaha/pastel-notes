@@ -3,6 +3,8 @@ import { Poppins } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import { SessionProvider } from "@/contexts/useSession";
+import { auth } from "@/lib/auth";
 
 const kollektif = localFont({
   src: "../public/Kollektif.ttf",
@@ -19,17 +21,21 @@ export const metadata: Metadata = {
   description: "A Notes App",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
 
+  const session = await auth()
+
   return (
     <html lang="en">
       <body className={kollektif.className}>
-        <Navbar />
-        {children}
+        <SessionProvider value={session}>
+          <Navbar />
+          {children}
+        </SessionProvider>
       </body>
     </html>
   );
