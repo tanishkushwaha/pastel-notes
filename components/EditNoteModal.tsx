@@ -1,15 +1,17 @@
 'use client';
 
+import { useUpdate } from "@/contexts/useUpdate";
 import { deleteNote, updateNote } from "@/lib/actions";
 import { useEffect, useRef, useState } from "react";
 
-export function LightBox({ type, title, body, id, open, onClose, setUpdate }: { type: string, title?: string, body?: string, id?: string, open: boolean, onClose: () => void, setUpdate: React.Dispatch<React.SetStateAction<boolean>> }) {
+export function EditNoteModal({ title, body, noteId, open, onClose }: { title?: string, body?: string, noteId?: string, open: boolean, onClose: () => void }) {
   const modalRef = useRef<HTMLDivElement>(null);
   const [titleInput, setTitleInput] = useState(title);
   const titleInputRef = useRef(titleInput);
   const [bodyInput, setBodyInput] = useState(body);
   const bodyInputRef = useRef(bodyInput);
   const localUpdate = useRef(false);
+  const { setUpdate } = useUpdate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (e.target.name === 'title') {
@@ -19,6 +21,7 @@ export function LightBox({ type, title, body, id, open, onClose, setUpdate }: { 
     }
     localUpdate.current = true;
   }
+
 
   useEffect(() => {
     titleInputRef.current = titleInput;
@@ -42,23 +45,17 @@ export function LightBox({ type, title, body, id, open, onClose, setUpdate }: { 
   const handleClickOutside = async (e: MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
 
-      if (type === 'edit') {
-        if (id && titleInputRef.current && (bodyInputRef.current || localUpdate.current)) {
-          await updateNote(id, titleInputRef.current as string, bodyInputRef.current as string);
-          console.log('note updated successfully', titleInputRef.current, bodyInputRef.current);
-          localUpdate.current = false;
+      if ((titleInputRef.current || bodyInputRef.current) && localUpdate.current) {
+        await updateNote(noteId!, titleInputRef.current as string, bodyInputRef.current as string);
+        console.log('note updated successfully', titleInputRef.current, bodyInputRef.current);
+        localUpdate.current = false;
 
-          setUpdate(true);
-        }
-
-        if (!titleInputRef.current && !bodyInputRef.current) {
-          await deleteNote(id!);
-          setUpdate(true);
-        }
+        setUpdate(true);
       }
 
-      if (type === 'create') {
-        console.log('creating note...');
+      if (!titleInputRef.current && !bodyInputRef.current) {
+        await deleteNote(noteId!);
+        setUpdate(true);
       }
       onClose();
     }
