@@ -78,9 +78,10 @@ export async function getUserNotes(userId: string) {
     where: {
       authorId: userId,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
-
-  console.log("notes:", notes);
 
   return notes;
 }
