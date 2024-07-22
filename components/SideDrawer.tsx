@@ -10,7 +10,7 @@ import { LuArrowLeftToLine, LuArchive, LuTrash, LuLogOut } from "react-icons/lu"
 const SideDrawer = ({ open, onClose }: { open: boolean, onClose: () => void }) => {
 
   return (
-    <nav className={`bg-white h-screen absolute top-0 left-0 ${open ? 'w-1/5 p-4' : 'w-0 p-0'} transition-all overflow-hidden drop-shadow-xl flex flex-col`}>
+    <nav className={`bg-white h-screen fixed z-10 top-0 left-0 ${open ? 'w-1/5 p-4' : 'w-0 p-0'} transition-all overflow-hidden drop-shadow-xl flex flex-col`}>
       <LuArrowLeftToLine className="size-8 mb-8 cursor-pointer" onClick={onClose} />
       <Menu />
     </nav>
