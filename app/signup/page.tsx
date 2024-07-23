@@ -1,5 +1,4 @@
 import SignupForm from "@/components/SignupForm";
-import { register } from "@/lib/actions";
 
 export default function Signup() {
 

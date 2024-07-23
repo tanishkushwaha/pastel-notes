@@ -1,7 +1,7 @@
 'use client';
 
 import Note from "@/components/Note";
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
 import { getSession, redirectTo, getUserNotes } from "@/lib/actions";
 import AddNoteButton from "@/components/AddNoteButton";
