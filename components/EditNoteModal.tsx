@@ -3,6 +3,7 @@
 import { useUpdate } from "@/contexts/useUpdate";
 import { deleteNote, updateNote } from "@/lib/actions";
 import { useEffect, useRef, useState } from "react";
+import NoteFooter from "./NoteFooter";
 
 export function EditNoteModal({ title, body, noteId, open, onClose }: { title?: string, body?: string, noteId?: string, open: boolean, onClose: () => void }) {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -31,6 +32,8 @@ export function EditNoteModal({ title, body, noteId, open, onClose }: { title?: 
     bodyInputRef.current = bodyInput;
   }, [bodyInput]);
 
+
+  // Close modal when clicked outside
   useEffect(() => {
     if (open) {
       document.addEventListener('mousedown', handleClickOutside);
@@ -63,9 +66,10 @@ export function EditNoteModal({ title, body, noteId, open, onClose }: { title?: 
 
   return (
     <div className={`fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 ${open ? 'flex' : 'hidden'} justify-center items-center z-10`}>
-      <div className="flex flex-col bg-pastelYellow p-4 rounded-2xl min-h-96 w-2/4 drop-shadow-lg" ref={modalRef}>
+      <div className="flex flex-col bg-pastelYellow p-8 rounded-2xl min-h-96 w-2/4 drop-shadow-lg" ref={modalRef}>
         <input type="text" name="title" onChange={handleInputChange} value={titleInput} placeholder="Title" className='block text-2xl mb-8 w-full outline-none bg-transparent' />
         <textarea name="body" onChange={handleInputChange} value={bodyInput} placeholder="Take a note..." className='resize-none w-full flex-1 outline-none text-lg bg-transparent' />
+        <NoteFooter />
       </div>
     </div>
   )
