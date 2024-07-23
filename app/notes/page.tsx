@@ -7,11 +7,11 @@ import { getSession, redirectTo, getUserNotes } from "@/lib/actions";
 import AddNoteButton from "@/components/AddNoteButton";
 import { UpdateProvider } from "@/contexts/useUpdate";
 
-
 type Note = {
   id: string;
   title: string;
   content: string;
+  color: string;
 }
 
 export default function Notes() {
@@ -65,7 +65,7 @@ export default function Notes() {
       <UpdateProvider value={{ update, setUpdate }}>
         <div className="flex flex-wrap justify-center gap-4 mt-16">
           {notes.map((note) => (
-            <Note key={note.id} id={note.id} title={note.title} body={note.content} />
+            <Note key={note.id} id={note.id} title={note.title} body={note.content} bgColor={note.color} />
           ))}
         </div>
         <AddNoteButton />

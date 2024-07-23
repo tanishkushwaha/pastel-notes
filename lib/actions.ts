@@ -90,13 +90,19 @@ export async function getUserNotes(userId: string) {
 export async function createNote(
   userId: string,
   title: string,
-  content: string
+  content: string,
+  color: string
 ) {
   try {
+    if (!userId || !title || !content || !color) {
+      console.log("Missing data");
+      return;
+    }
     const note = await prisma.note.create({
       data: {
         title,
         content,
+        color,
         authorId: userId,
       },
     });
