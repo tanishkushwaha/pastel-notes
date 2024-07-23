@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
 import { SessionProvider } from "@/contexts/useSession";
 import { auth } from "@/lib/auth";
+import Navbar from "@/components/Navbar";
+import SmallDeviceWarning from "@/components/SmallDeviceWarning";
 
 const kollektif = localFont({
   src: "../public/Kollektif.ttf",
@@ -32,6 +33,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={kollektif.className}>
+        <SmallDeviceWarning />
         <SessionProvider value={session}>
           <Navbar />
           {children}
