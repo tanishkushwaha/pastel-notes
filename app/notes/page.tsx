@@ -3,9 +3,10 @@
 import Note from "@/components/Note";
 import { useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
-import { getSession, redirectTo, getUserNotes } from "@/lib/actions";
+import { getSession, redirectTo, getNotes } from "@/lib/actions";
 import AddNoteButton from "@/components/AddNoteButton";
 import { UpdateProvider } from "@/contexts/useUpdate";
+import { Toaster } from "react-hot-toast";
 
 type Note = {
   id: string;
@@ -27,7 +28,7 @@ export default function Notes() {
       // If session is available, set authenticated to true and fetch user notes
       if (session && session.user) {
         setAuthenticated(true);
-        getUserNotes(session.user.id as string).then((notes) => {
+        getNotes(session.user.id as string).then((notes) => {
           setNotes(notes);
         });
 
@@ -43,7 +44,7 @@ export default function Notes() {
       console.log('update detected, fetching notes...');
 
       getSession().then((session) => {
-        getUserNotes(session?.user?.id as string).then((notes) => {
+        getNotes(session?.user?.id as string).then((notes) => {
           setNotes(notes);
         });
       });
@@ -72,6 +73,7 @@ export default function Notes() {
         </div>
         <AddNoteButton />
       </UpdateProvider>
+      <Toaster position="top-right" />
     </>
   )
 }

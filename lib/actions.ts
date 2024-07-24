@@ -73,10 +73,11 @@ export async function redirectTo(path: string) {
 }
 
 // Get Notes
-export async function getUserNotes(userId: string) {
+export async function getNotes(userId: string) {
   const notes = await prisma.note.findMany({
     where: {
       authorId: userId,
+      archived: false,
     },
     orderBy: {
       createdAt: "desc",
@@ -147,4 +148,57 @@ export async function deleteNote(noteId: string) {
   } catch (error) {
     console.log(error);
   }
+}
+
+// Archive Note
+export async function archiveNote(noteId: string) {
+  try {
+    await prisma.note.update({
+      where: {
+        id: noteId,
+      },
+      data: {
+        archived: true,
+      },
+    });
+
+    return { success: true, message: "Note archived successfully" };
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "Error occured" };
+  }
+}
+
+// Unarchive Note
+export async function unarchiveNote(noteId: string) {
+  try {
+    await prisma.note.update({
+      where: {
+        id: noteId,
+      },
+      data: {
+        archived: false,
+      },
+    });
+
+    return { success: true, message: "Note unarchived successfully" };
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "Error occured" };
+  }
+}
+
+// Get Archived Notes
+export async function getArchivedNotes(userId: string) {
+  const notes = await prisma.note.findMany({
+    where: {
+      authorId: userId,
+      archived: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return notes;
 }
