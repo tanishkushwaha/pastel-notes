@@ -1,14 +1,24 @@
 import { useUpdate } from "@/contexts/useUpdate";
-import { archiveNote, unarchiveNote } from "@/lib/actions";
+import {
+  archiveNote,
+  deleteNote,
+  restoreNote,
+  trashNote,
+  unarchiveNote,
+} from "@/lib/actions";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { LuArchive, LuTrash } from "react-icons/lu";
 import { LuArchiveRestore } from "react-icons/lu";
+import { LuTrash2 } from "react-icons/lu";
+import { LuArrowBigUp } from "react-icons/lu";
 
 type NoteModalFooterProps = {
   archiveButton?: boolean;
   unarchiveButton?: boolean;
   trashButton?: boolean;
+  permanentTrashButton?: boolean;
+  restoreButton?: boolean;
   bgColor: string;
   setbgColor: React.Dispatch<React.SetStateAction<string>>;
   madeChanges?: React.MutableRefObject<boolean>;
@@ -19,6 +29,8 @@ export default function NoteModalFooter({
   archiveButton,
   unarchiveButton,
   trashButton,
+  permanentTrashButton,
+  restoreButton,
   bgColor,
   setbgColor,
   madeChanges,
@@ -56,6 +68,47 @@ export default function NoteModalFooter({
     });
   };
 
+  const handleTrashClick = () => {
+    if (!noteId) return;
+
+    trashNote(noteId).then((res) => {
+      if (res.success) {
+        console.log(res.message);
+
+        toast.success(res.message);
+        setUpdate(true);
+      } else {
+        toast.error("Failed to move note to trash");
+      }
+    });
+  };
+
+  const handlePerrmanentTrashClick = () => {
+    if (!noteId) return;
+
+    deleteNote(noteId).then((res) => {
+      if (res.success) {
+        toast.success(res.message);
+        setUpdate(true);
+      } else {
+        toast.error("Error occured");
+      }
+    });
+  };
+
+  const handleRestoreClick = () => {
+    if (!noteId) return;
+
+    restoreNote(noteId).then((res) => {
+      if (res.success) {
+        toast.success(res.message);
+        setUpdate(true);
+      } else {
+        toast.error("Failed to restore note");
+      }
+    });
+  };
+
   return (
     <>
       <div className='flex justify-between items-center'>
@@ -69,16 +122,36 @@ export default function NoteModalFooter({
             <LuArchive
               className='text-black text-2xl cursor-pointer'
               onClick={handleArchiveClick}
+              title='Archive'
             />
           )}
           {unarchiveButton && (
             <LuArchiveRestore
               className='text-black text-2xl cursor-pointer'
               onClick={handleUnarchiveClick}
+              title='Unarchive'
             />
           )}
           {trashButton && (
-            <LuTrash className='text-black text-2xl cursor-pointer' />
+            <LuTrash
+              className='text-black text-2xl cursor-pointer'
+              title='Move to Trash'
+              onClick={handleTrashClick}
+            />
+          )}
+          {permanentTrashButton && (
+            <LuTrash2
+              className='text-black text-2xl cursor-pointer'
+              title='Delete Permanently'
+              onClick={handlePerrmanentTrashClick}
+            />
+          )}
+          {restoreButton && (
+            <LuArrowBigUp
+              className='text-black text-2xl cursor-pointer'
+              title='Restore'
+              onClick={handleRestoreClick}
+            />
           )}
         </div>
       </div>

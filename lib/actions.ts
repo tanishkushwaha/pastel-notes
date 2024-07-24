@@ -78,6 +78,7 @@ export async function getNotes(userId: string) {
     where: {
       authorId: userId,
       archived: false,
+      trashed: false,
     },
     orderBy: {
       createdAt: "desc",
@@ -145,8 +146,11 @@ export async function deleteNote(noteId: string) {
         id: noteId,
       },
     });
+
+    return { success: true, message: "Note deleted" };
   } catch (error) {
     console.log(error);
+    return { success: false, message: "Error occured" };
   }
 }
 
@@ -162,7 +166,7 @@ export async function archiveNote(noteId: string) {
       },
     });
 
-    return { success: true, message: "Note archived successfully" };
+    return { success: true, message: "Note moved to archive" };
   } catch (error) {
     console.log(error);
     return { success: false, message: "Error occured" };
@@ -181,7 +185,7 @@ export async function unarchiveNote(noteId: string) {
       },
     });
 
-    return { success: true, message: "Note unarchived successfully" };
+    return { success: true, message: "Note unarchived" };
   } catch (error) {
     console.log(error);
     return { success: false, message: "Error occured" };
@@ -194,6 +198,61 @@ export async function getArchivedNotes(userId: string) {
     where: {
       authorId: userId,
       archived: true,
+      trashed: false,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return notes;
+}
+
+// Trash Note
+export async function trashNote(noteId: string) {
+  try {
+    await prisma.note.update({
+      where: {
+        id: noteId,
+      },
+      data: {
+        trashed: true,
+      },
+    });
+
+    return { success: true, message: "Note moved to Trash" };
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "Error occured" };
+  }
+}
+
+// Restore Note
+export async function restoreNote(noteId: string) {
+  try {
+    await prisma.note.update({
+      where: {
+        id: noteId,
+      },
+      data: {
+        trashed: false,
+        archived: false,
+      },
+    });
+
+    return { success: true, message: "Note restored" };
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "Error occured" };
+  }
+}
+
+// Get Trashed Notes
+export async function getTrashedNotes(userId: string) {
+  const notes = await prisma.note.findMany({
+    where: {
+      authorId: userId,
+      trashed: true,
     },
     orderBy: {
       createdAt: "desc",

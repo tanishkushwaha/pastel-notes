@@ -13,6 +13,7 @@ type EditNoteModalProps = {
   open: boolean;
   onClose: () => void;
   archived: boolean;
+  trashed: boolean;
 };
 
 export function EditNoteModal({
@@ -23,6 +24,7 @@ export function EditNoteModal({
   open,
   onClose,
   archived,
+  trashed,
 }: EditNoteModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const [titleInput, setTitleInput] = useState(title);
@@ -82,13 +84,10 @@ export function EditNoteModal({
         madeChanges.current
       ) {
         localUpdate.current = true;
-
-        // setUpdate(true);
       }
 
       if (!titleInputRef.current && !bodyInputRef.current) {
         await deleteNote(noteId!);
-        // setUpdate(true);
         localUpdate.current = true;
       }
       onClose();
@@ -108,8 +107,9 @@ export function EditNoteModal({
 
   return (
     <div
-      className={`fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 ${open ? "flex" : "hidden"
-        } justify-center items-center z-10`}
+      className={`fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 ${
+        open ? "flex" : "hidden"
+      } justify-center items-center z-10`}
     >
       <div
         className={`flex flex-col ${tempBgColor} p-8 rounded-2xl min-h-96 w-2/4 drop-shadow-lg`}
@@ -135,9 +135,11 @@ export function EditNoteModal({
           setbgColor={setTempBgColor}
           madeChanges={madeChanges}
           noteId={noteId}
-          archiveButton={!archived}
+          archiveButton={!archived && !trashed}
           unarchiveButton={archived}
-          trashButton
+          trashButton={!trashed}
+          permanentTrashButton={trashed}
+          restoreButton={trashed}
         />
       </div>
     </div>
