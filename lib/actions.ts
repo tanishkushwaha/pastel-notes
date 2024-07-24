@@ -117,7 +117,8 @@ export async function createNote(
 export async function updateNote(
   noteId: string,
   title: string,
-  content: string
+  content: string,
+  color: string
 ) {
   try {
     await prisma.note.update({
@@ -127,6 +128,7 @@ export async function updateNote(
       data: {
         title,
         content,
+        color,
       },
     });
   } catch (error) {

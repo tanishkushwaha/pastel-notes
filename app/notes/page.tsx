@@ -40,6 +40,8 @@ export default function Notes() {
   // Check for updates and fetch notes
   useEffect(() => {
     if (update) {
+      console.log('update detected, fetching notes...');
+
       getSession().then((session) => {
         getUserNotes(session?.user?.id as string).then((notes) => {
           setNotes(notes);
