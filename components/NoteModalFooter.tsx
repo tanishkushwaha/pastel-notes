@@ -1,4 +1,5 @@
 import { useUpdate } from "@/contexts/useUpdate";
+import useDisclosure from "@/hooks/useDisclosure";
 import {
   archiveNote,
   deleteNote,
@@ -12,6 +13,7 @@ import { LuArchive, LuTrash } from "react-icons/lu";
 import { LuArchiveRestore } from "react-icons/lu";
 import { LuTrash2 } from "react-icons/lu";
 import { LuArrowBigUp } from "react-icons/lu";
+import { useDeleteConfirmationModal } from "@/contexts/useDeleteConfirmationModal";
 
 type NoteModalFooterProps = {
   archiveButton?: boolean;
@@ -37,6 +39,7 @@ export default function NoteModalFooter({
   noteId,
 }: NoteModalFooterProps) {
   const { setUpdate } = useUpdate();
+  const { onOpen } = useDeleteConfirmationModal();
 
   const handleArchiveClick = () => {
     if (!noteId) return;
@@ -84,16 +87,18 @@ export default function NoteModalFooter({
   };
 
   const handlePerrmanentTrashClick = () => {
-    if (!noteId) return;
+    onOpen();
 
-    deleteNote(noteId).then((res) => {
-      if (res.success) {
-        toast.success(res.message);
-        setUpdate(true);
-      } else {
-        toast.error("Error occured");
-      }
-    });
+    // if (!noteId) return;
+
+    // deleteNote(noteId).then((res) => {
+    //   if (res.success) {
+    //     toast.success(res.message);
+    //     setUpdate(true);
+    //   } else {
+    //     toast.error("Error occured");
+    //   }
+    // });
   };
 
   const handleRestoreClick = () => {
