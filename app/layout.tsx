@@ -14,7 +14,7 @@ const kollektif = localFont({
 
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -27,11 +27,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-  const session = await auth()
+  const session = await auth();
 
   return (
-    <html lang="en">
+    <html lang='en'>
       <body className={kollektif.className}>
         <SmallDeviceWarning />
         <SessionProvider value={session}>

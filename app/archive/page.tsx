@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Note from "@/components/Note";
 import { useEffect, useState } from "react";
@@ -12,7 +12,7 @@ type Note = {
   title: string;
   content: string;
   color: string;
-}
+};
 
 export default function Archive() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -22,14 +22,12 @@ export default function Archive() {
   // Auth check
   useEffect(() => {
     getSession().then((session) => {
-
       // If session is available, set authenticated to true and fetch user notes
       if (session && session.user) {
         setAuthenticated(true);
         getArchivedNotes(session.user.id as string).then((notes) => {
           setNotes(notes);
         });
-
       } else {
         redirectTo("/signin");
       }
@@ -39,7 +37,7 @@ export default function Archive() {
   // Check for updates and fetch notes
   useEffect(() => {
     if (update) {
-      console.log('update detected, fetching notes...');
+      console.log("update detected, fetching notes...");
 
       getSession().then((session) => {
         getArchivedNotes(session?.user?.id as string).then((notes) => {
@@ -51,27 +49,32 @@ export default function Archive() {
     }
   }, [update]);
 
-
   // Loading spinner
   if (!authenticated) {
     return (
-      <div className="h-screen flex justify-center items-center">
+      <div className='h-screen flex justify-center items-center'>
         <BarLoader />
       </div>
-    )
+    );
   }
-
 
   return (
     <>
       <UpdateProvider value={{ update, setUpdate }}>
-        <div className="flex flex-wrap justify-center gap-4 mt-16">
+        <div className='flex flex-wrap justify-center gap-4 mt-16'>
           {notes.map((note) => (
-            <Note key={note.id} id={note.id} title={note.title} body={note.content} bgColor={note.color} archived />
+            <Note
+              key={note.id}
+              id={note.id}
+              title={note.title}
+              body={note.content}
+              bgColor={note.color}
+              archived
+            />
           ))}
         </div>
       </UpdateProvider>
-      <Toaster position="top-right" />
+      <Toaster position='top-right' />
     </>
-  )
+  );
 }
