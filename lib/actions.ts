@@ -6,6 +6,7 @@ import prisma from "./db";
 import { auth, signIn, signOut } from "@/lib/auth";
 import { CredentialsSignin } from "next-auth";
 import { redirect } from "next/navigation";
+import { isRedirectError } from "next/dist/client/components/redirect";
 
 // Register
 export async function register(prevState: any, formData: FormData) {
@@ -40,18 +41,17 @@ export async function register(prevState: any, formData: FormData) {
   }
 }
 
-export async function authSignIn(formData: FormData) {
+export async function authSignIn(prevState: any, formData: FormData) {
   try {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    await signIn("credentials", { email, password, redirectTo: "/signup" });
-    console.log("hello");
+    await signIn("credentials", { email, password, redirectTo: "/notes" });
   } catch (error) {
-    if (error instanceof CredentialsSignin) {
-      console.log("=====================================================");
-
-      console.log(error.message);
+    if (isRedirectError(error)) {
+      throw error;
+    } else {
+      return { error: true };
     }
   }
 }

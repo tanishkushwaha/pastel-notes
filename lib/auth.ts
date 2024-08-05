@@ -23,7 +23,7 @@ const providers: Provider[] = [
       }
 
       if (!user) {
-        console.log("Invalid credentials");
+        // console.log("Invalid credentials");
         throw new CredentialsSignin("Invalid credentials");
       }
 
