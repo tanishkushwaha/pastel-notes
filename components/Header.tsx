@@ -8,7 +8,7 @@ export default function Header({
   return (
     <div className='flex items-center p-4'>
       <LuMenu className='size-8 cursor-pointer' onClick={sideDrawerOpener} />
-      <h1 className='text-2xl mx-auto select-none'>Meow Notes</h1>
+      <h1 className='text-2xl mx-auto select-none'>Pastel Notes</h1>
     </div>
   );
 }
