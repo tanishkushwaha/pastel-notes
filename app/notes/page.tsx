@@ -62,16 +62,18 @@ export default function Notes() {
   return (
     <>
       <UpdateProvider value={{ update, setUpdate }}>
-        <div className='flex flex-wrap justify-center gap-4 mt-16'>
-          {notes.map((note) => (
-            <Note
-              key={note.id}
-              id={note.id}
-              title={note.title}
-              body={note.content}
-              bgColor={note.color}
-            />
-          ))}
+        <div className='px-60'>
+          <div className='flex flex-wrap gap-4 mt-16'>
+            {notes.map((note) => (
+              <Note
+                key={note.id}
+                id={note.id}
+                title={note.title}
+                body={note.content}
+                bgColor={note.color}
+              />
+            ))}
+          </div>
         </div>
         <AddNoteButton />
       </UpdateProvider>
