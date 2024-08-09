@@ -1,18 +1,17 @@
 "use server";
 
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import bcrypt from "bcryptjs";
 import prisma from "./db";
 import { auth, signIn, signOut } from "@/lib/auth";
-import { CredentialsSignin } from "next-auth";
 import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect";
+import { hashPassword } from "./helpers";
 
 // Register
 export async function register(prevState: any, formData: FormData) {
   try {
     const password = formData.get("password") as string;
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hashPassword(password);
 
     const res = await prisma.user.create({
       data: {
@@ -41,6 +40,7 @@ export async function register(prevState: any, formData: FormData) {
   }
 }
 
+// Sign in
 export async function authSignIn(prevState: any, formData: FormData) {
   try {
     const email = formData.get("email") as string;

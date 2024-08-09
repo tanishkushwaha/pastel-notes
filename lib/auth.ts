@@ -1,8 +1,8 @@
 import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
 import prisma from "./db";
 import { Provider } from "next-auth/providers";
+import { comparePassword } from "@/lib/helpers";
 
 const providers: Provider[] = [
   Credentials({
@@ -14,7 +14,12 @@ const providers: Provider[] = [
       let user = await getUserFromDb(credentials.email as string);
 
       if (user) {
-        const isPasswordValid = await bcrypt.compare(
+        // const isPasswordValid = await bcrypt.compare(
+        //   credentials.password as string,
+        //   user.password
+        // );
+
+        const isPasswordValid = comparePassword(
           credentials.password as string,
           user.password
         );
