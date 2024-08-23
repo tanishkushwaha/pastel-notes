@@ -1,51 +1,21 @@
 "use client";
 
-import { getSession, redirectTo } from "@/lib/actions";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { BarLoader } from "react-spinners";
 import { authSignIn } from "@/lib/actions";
 
 export default function SigninForm() {
-  const [authenticated, setAuthenticated] = useState({
-    pending: true,
-    value: false,
-    redirect: false,
-  });
   const [formState, formAction] = useFormState(authSignIn, {
     error: false,
   });
-
-  useEffect(() => {
-    getSession().then((session) => {
-      if (session) {
-        setAuthenticated({ pending: false, value: true, redirect: true });
-      } else {
-        setAuthenticated({ pending: false, value: false, redirect: false });
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    if (authenticated.redirect) {
-      redirectTo("/");
-    }
-  }, [authenticated.redirect]);
 
   useEffect(() => {
     if (formState && formState.error) {
       toast.error("Invalid credentials");
     }
   }, [formState]);
-
-  if (authenticated.pending || authenticated.redirect) {
-    return (
-      <div className='flex justify-center mt-8'>
-        <BarLoader />
-      </div>
-    );
-  }
 
   return (
     <>
@@ -59,14 +29,6 @@ export default function SigninForm() {
 
 function FormContent() {
   const { pending } = useFormStatus();
-
-  if (pending) {
-    return (
-      <div className='flex justify-center mt-8'>
-        <BarLoader />
-      </div>
-    );
-  }
 
   return (
     <div className='mt-8 w-96 grid grid-cols-[auto_1fr] grid-rows-2 gap-4'>
@@ -88,12 +50,18 @@ function FormContent() {
         required
         className='col-start-2 row-start-2 p-2 border-2 border-black rounded-lg text-xl'
       />
-      <button
-        type='submit'
-        className='block w-full p-2 bg-black border-2 border-black text-white rounded-lg mt-4 text-xl col-span-2 active:bg-white active:text-black transition-colors'
-      >
-        Sign in
-      </button>
+      {pending ? (
+        <div className='flex justify-center col-span-2 w-full pt-4 pb-4'>
+          <BarLoader />
+        </div>
+      ) : (
+        <button
+          type='submit'
+          className='block w-full p-2 bg-black border-2 border-black text-white rounded-lg mt-4 text-xl col-span-2 active:bg-white active:text-black transition-colors'
+        >
+          Sign in
+        </button>
+      )}
     </div>
   );
 }
