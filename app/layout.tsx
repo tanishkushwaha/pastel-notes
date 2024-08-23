@@ -18,7 +18,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Pastel Pad",
+  title: "Pastel Notes",
   description: "A Notes App",
 };
 
