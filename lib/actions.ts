@@ -3,7 +3,6 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import prisma from "./db";
 import { auth, signIn, signOut } from "@/lib/auth";
-import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { hashPassword } from "./helpers";
 
@@ -65,11 +64,6 @@ export async function authSignOut() {
 export async function getSession() {
   const session = await auth();
   return session;
-}
-
-// Redirect
-export async function redirectTo(path: string) {
-  redirect(path);
 }
 
 // Get Notes

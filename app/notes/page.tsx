@@ -15,7 +15,7 @@ type Note = {
   color: string;
 };
 
-export default function Notes() {
+export default function Home() {
   const [authenticated, setAuthenticated] = useState(false);
   const [notes, setNotes] = useState<Note[]>([]);
   const [update, setUpdate] = useState(false);
