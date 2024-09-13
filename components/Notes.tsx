@@ -7,12 +7,13 @@ import { UpdateProvider } from "@/contexts/useUpdate";
 import { Toaster } from "react-hot-toast";
 import { Note as NoteType } from "@/lib/types";
 import { Session } from "next-auth";
+import AddNoteButton from "@/components/AddNoteButton";
 
 export default function Notes({
-  type,
+  noteCategory,
   session,
 }: {
-  type: "normal" | "archived" | "trashed";
+  noteCategory: "normal" | "archived" | "trashed";
   session: Session;
 }) {
   const [notes, setNotes] = useState<NoteType[]>([]);
@@ -24,14 +25,17 @@ export default function Notes({
       if (session && session.user) {
         let data: NoteType[] = [];
 
-        switch (type) {
+        switch (noteCategory) {
           case "archived":
+            console.log("fetching archived notes");
             data = await getArchivedNotes(session.user.id as string);
             break;
           case "normal":
+            console.log("fetching notes");
             data = await getNotes(session.user.id as string);
             break;
           case "trashed":
+            console.log("fetching trashed notes");
             data = await getTrashedNotes(session.user.id as string);
             break;
           default:
@@ -53,7 +57,7 @@ export default function Notes({
   return (
     <>
       <UpdateProvider value={{ update, setUpdate }}>
-        <div className='flex flex-wrap justify-center gap-4 mt-16'>
+        <div className="flex flex-wrap justify-center gap-4 mt-16">
           {notes.map((note) => (
             <Note
               key={note.id}
@@ -61,12 +65,14 @@ export default function Notes({
               title={note.title}
               body={note.content}
               bgColor={note.color}
-              archived
+              archived={noteCategory === "archived"}
+              trashed={noteCategory === "trashed"}
             />
           ))}
         </div>
+        {noteCategory === "normal" && <AddNoteButton />}
       </UpdateProvider>
-      <Toaster position='top-right' />
+      <Toaster position="top-right" />
     </>
   );
 }

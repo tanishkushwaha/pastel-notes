@@ -9,5 +9,5 @@ export default async function Archive() {
     redirect("/signin");
   }
 
-  return <Notes type='archived' session={session} />;
+  return <Notes noteCategory="archived" session={session} />;
 }

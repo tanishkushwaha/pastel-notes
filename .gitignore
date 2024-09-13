@@ -41,3 +41,6 @@ tests/
 
 # vscode
 .vscode
+
+# db
+*.db
