@@ -40,7 +40,7 @@ export default function Note({
           <DeleteConfirmationModal />
         </DeleteConfirmationModalProvider>
         <div
-          className={`w-64 min-h-64 ${bgColor} rounded-2xl p-8 flex flex-col drop-shadow-lg`}
+          className={`min-h-64 ${bgColor} rounded-2xl p-8 flex flex-col drop-shadow-lg cursor-pointer hover:scale-105 transition-transform ease-out`}
           onClick={() => editNoteModal.onOpen()}
         >
           <h1 className='text-2xl mb-4'>{title}</h1>

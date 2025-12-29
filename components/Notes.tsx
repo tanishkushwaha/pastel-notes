@@ -57,7 +57,7 @@ export default function Notes({
   return (
     <>
       <UpdateProvider value={{ update, setUpdate }}>
-        <div className="flex flex-wrap justify-center gap-4 mt-16">
+        <div className='grid grid-cols-4 gap-8 items-center my-16 mx-16'>
           {notes.map((note) => (
             <Note
               key={note.id}
@@ -72,7 +72,7 @@ export default function Notes({
         </div>
         {noteCategory === "normal" && <AddNoteButton />}
       </UpdateProvider>
-      <Toaster position="top-right" />
+      <Toaster position='top-right' />
     </>
   );
 }
