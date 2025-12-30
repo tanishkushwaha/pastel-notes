@@ -8,6 +8,8 @@ import { Toaster } from "react-hot-toast";
 import { Note as NoteType } from "@/lib/types";
 import { Session } from "next-auth";
 import AddNoteButton from "@/components/AddNoteButton";
+import { FaRegNoteSticky } from "react-icons/fa6";
+import { LuArchive, LuTrash } from "react-icons/lu";
 
 export default function Notes({
   noteCategory,
@@ -57,19 +59,44 @@ export default function Notes({
   return (
     <>
       <UpdateProvider value={{ update, setUpdate }}>
-        <div className='grid grid-cols-4 gap-8 items-center my-16 mx-16'>
-          {notes.map((note) => (
-            <Note
-              key={note.id}
-              id={note.id}
-              title={note.title}
-              body={note.content}
-              bgColor={note.color}
-              archived={noteCategory === "archived"}
-              trashed={noteCategory === "trashed"}
-            />
-          ))}
-        </div>
+        {notes.length === 0 ? (
+          <div className='w-full h-[90%] flex justify-center items-center'>
+            {noteCategory === "normal" ? (
+              <div className='flex flex-col gap-4 items-center'>
+                <FaRegNoteSticky className='size-72 text-gray-200' />
+                <p className='text-gray-500'>
+                  Oops! You don't have any notes. Hit "Create" on the
+                  bottom-right to create one.
+                </p>
+              </div>
+            ) : noteCategory === "archived" ? (
+              <div className='flex flex-col gap-4 items-center'>
+                <LuArchive className='size-72 text-gray-200' />
+                <p className='text-gray-500'>No Archives</p>
+              </div>
+            ) : (
+              <div className='flex flex-col gap-4 items-center'>
+                <LuTrash className='size-72 text-gray-200' />
+                <p className='text-gray-500'>Empty</p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className='grid grid-cols-4 gap-8 items-center my-16 mx-16'>
+            {notes.map((note) => (
+              <Note
+                key={note.id}
+                id={note.id}
+                title={note.title}
+                body={note.content}
+                bgColor={note.color}
+                archived={noteCategory === "archived"}
+                trashed={noteCategory === "trashed"}
+              />
+            ))}
+          </div>
+        )}
+
         {noteCategory === "normal" && <AddNoteButton />}
       </UpdateProvider>
       <Toaster position='top-right' />
