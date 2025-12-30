@@ -43,7 +43,7 @@ function FormContent() {
 
   return (
     <>
-      <div className='mt-8 md:w-96 grid grid-cols-[auto_1fr] grid-rows-4 gap-4'>
+      <div className='mt-8 grid grid-cols-[minmax(0,auto)_minmax(0,1fr)] grid-rows-4 gap-4'>
         <label className='col-start-1 row-start-1 self-center text-2xl'>
           first name:
         </label>

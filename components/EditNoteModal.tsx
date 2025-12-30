@@ -112,7 +112,7 @@ export function EditNoteModal({
       } justify-center items-center z-10`}
     >
       <div
-        className={`flex flex-col ${tempBgColor} p-8 rounded-2xl min-h-96 w-2/4 drop-shadow-lg`}
+        className={`flex flex-col ${tempBgColor} p-8 rounded-2xl min-h-96 w-[90%] lg:w-1/2 drop-shadow-lg`}
         ref={modalRef}
       >
         <input

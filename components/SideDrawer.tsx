@@ -21,7 +21,7 @@ const SideDrawer = ({
   return (
     <nav
       className={`bg-white h-screen fixed z-30 top-0 left-0 ${
-        open ? "w-1/5 p-4" : "w-0 p-0"
+        open ? "w-1/2 p-4 md:w-1/4 lg:w-1/5" : "w-0 p-0"
       } transition-all overflow-hidden drop-shadow-xl flex flex-col`}
     >
       <LuArrowLeftToLine

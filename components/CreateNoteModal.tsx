@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useSession } from "@/contexts/useSession";
 import { useUpdate } from "@/contexts/useUpdate";
@@ -7,13 +7,21 @@ import { useEffect, useRef, useState } from "react";
 import { LuArchive, LuTrash } from "react-icons/lu";
 import NoteModalFooter from "./NoteModalFooter";
 
-export default function createNoteModal({ open, onClose }: { title?: string, body?: string, open: boolean, onClose: () => void }) {
+export default function createNoteModal({
+  open,
+  onClose,
+}: {
+  title?: string;
+  body?: string;
+  open: boolean;
+  onClose: () => void;
+}) {
   const modalRef = useRef<HTMLDivElement>(null);
-  const [titleInput, setTitleInput] = useState('');
+  const [titleInput, setTitleInput] = useState("");
   const titleInputRef = useRef(titleInput);
-  const [bodyInput, setBodyInput] = useState('');
+  const [bodyInput, setBodyInput] = useState("");
   const bodyInputRef = useRef(bodyInput);
-  const [bgColor, setbgColor] = useState('bg-pastelYellow');
+  const [bgColor, setbgColor] = useState("bg-pastelYellow");
   const bgColorRef = useRef(bgColor);
   const session = useSession();
   const { setUpdate } = useUpdate();
@@ -32,35 +40,39 @@ export default function createNoteModal({ open, onClose }: { title?: string, bod
 
   useEffect(() => {
     if (open) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [open]);
 
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (e.target.name === 'title') {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    if (e.target.name === "title") {
       setTitleInput(e.target.value);
     } else {
       setBodyInput(e.target.value);
     }
-  }
+  };
 
   const resetStates = () => {
-    setTitleInput('');
-    setBodyInput('');
-    setbgColor('bg-pastelYellow');
-  }
+    setTitleInput("");
+    setBodyInput("");
+    setbgColor("bg-pastelYellow");
+  };
 
   const handleClickOutside = async (e: MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-
       if (titleInputRef.current && bodyInputRef.current && session?.user?.id) {
-
-        await createNote(session?.user?.id, titleInputRef.current as string, bodyInputRef.current as string, bgColorRef.current as string);
+        await createNote(
+          session?.user?.id,
+          titleInputRef.current as string,
+          bodyInputRef.current as string,
+          bgColorRef.current as string
+        );
 
         setUpdate(true);
       }
@@ -71,13 +83,32 @@ export default function createNoteModal({ open, onClose }: { title?: string, bod
   };
 
   return (
-    <div className={`fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 ${open ? 'flex' : 'hidden'} justify-center items-center z-10`}>
-      <div className={`flex flex-col ${bgColor} p-8 rounded-2xl min-h-96 w-2/4 drop-shadow-lg`} ref={modalRef}>
-        <input type="text" name="title" onChange={handleInputChange} value={titleInput} placeholder="Title" className='block text-2xl mb-8 w-full outline-none bg-transparent' />
-        <textarea name="body" onChange={handleInputChange} value={bodyInput} placeholder="Take a note..." className='resize-none w-full flex-1 outline-none text-lg bg-transparent' />
+    <div
+      className={`fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 ${
+        open ? "flex" : "hidden"
+      } justify-center items-center z-10`}
+    >
+      <div
+        className={`flex flex-col ${bgColor} p-8 rounded-2xl min-h-96 w-[90%] lg:w-1/2 drop-shadow-lg`}
+        ref={modalRef}
+      >
+        <input
+          type='text'
+          name='title'
+          onChange={handleInputChange}
+          value={titleInput}
+          placeholder='Title'
+          className='block text-2xl mb-8 w-full outline-none bg-transparent'
+        />
+        <textarea
+          name='body'
+          onChange={handleInputChange}
+          value={bodyInput}
+          placeholder='Take a note...'
+          className='resize-none w-full flex-1 outline-none text-lg bg-transparent'
+        />
         <NoteModalFooter bgColor={bgColor} setbgColor={setbgColor} />
       </div>
     </div>
-  )
+  );
 }
-

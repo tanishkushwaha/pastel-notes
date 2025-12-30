@@ -14,7 +14,6 @@ export default function Header({
       <h1 className='absolute z-10 w-full text-2xl text-center select-none'>
         Pastel Notes
       </h1>
-      {/* <div className='absolute z-10 text-center w-full'>Test</div> */}
     </div>
   );
 }

@@ -32,7 +32,6 @@ export default async function RootLayout({
   return (
     <html lang='en'>
       <body className={kollektif.className}>
-        <SmallDeviceWarning />
         <SessionProvider value={session}>
           <Navbar />
           {children}

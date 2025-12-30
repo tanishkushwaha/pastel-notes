@@ -88,17 +88,6 @@ export default function NoteModalFooter({
 
   const handlePerrmanentTrashClick = () => {
     onOpen();
-
-    // if (!noteId) return;
-
-    // deleteNote(noteId).then((res) => {
-    //   if (res.success) {
-    //     toast.success(res.message);
-    //     setUpdate(true);
-    //   } else {
-    //     toast.error("Error occured");
-    //   }
-    // });
   };
 
   const handleRestoreClick = () => {
@@ -116,7 +105,7 @@ export default function NoteModalFooter({
 
   return (
     <>
-      <div className='flex justify-between items-center'>
+      <div className='w-full flex justify-between items-center'>
         <ColorPicker
           bgColor={bgColor}
           setbgColor={setbgColor}
@@ -198,7 +187,7 @@ function ColorPicker({
   };
 
   return (
-    <div className='flex items-center gap-4'>
+    <div className='w-full flex flex-wrap items-center gap-4'>
       {bgColors.map((bgColor) => (
         <div
           key={bgColor}
