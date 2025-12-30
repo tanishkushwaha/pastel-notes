@@ -5,7 +5,6 @@ import "./globals.css";
 import { SessionProvider } from "@/contexts/useSession";
 import { auth } from "@/lib/auth";
 import Navbar from "@/components/Navbar";
-import SmallDeviceWarning from "@/components/SmallDeviceWarning";
 
 const kollektif = localFont({
   src: "../public/Kollektif.ttf",
