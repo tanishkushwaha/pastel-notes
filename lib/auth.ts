@@ -14,25 +14,20 @@ const providers: Provider[] = [
       let user = await getUserFromDb(credentials.email as string);
 
       if (user) {
-        // const isPasswordValid = await bcrypt.compare(
-        //   credentials.password as string,
-        //   user.password
-        // );
-
-        const isPasswordValid = comparePassword(
+        const isPasswordValid = await comparePassword(
           credentials.password as string,
           user.password
         );
 
-        if (!isPasswordValid) user = null;
+        if (!isPasswordValid) return null;
+
+        return {
+          id: user.id,
+          email: user.email,
+        };
       }
 
-      if (!user) {
-        // console.log("Invalid credentials");
-        throw new CredentialsSignin("Invalid credentials");
-      }
-
-      return user;
+      return null;
     },
   }),
 ];
@@ -63,6 +58,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.id = token.id as string;
 
       return session;
+    },
+  },
+  logger: {
+    error(error) {
+      // Silence invalid credentials errors
+      if (error.name === "CredentialsSignin") return;
+
+      console.error("[auth][error]", error);
     },
   },
 });
