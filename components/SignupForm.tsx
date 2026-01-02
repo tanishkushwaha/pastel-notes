@@ -1,24 +1,28 @@
 "use client";
 
 import { register } from "@/lib/actions";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { BarLoader } from "react-spinners";
 
 export default function SignupForm() {
-  const [state, formAction] = useFormState(register, undefined);
+  const router = useRouter();
+  const [formState, formAction] = useFormState(register, null);
 
   useEffect(() => {
-    if (state && !state.success && state.message) {
-      toast.error(state.message);
+    if (!formState) return;
+
+    if (!formState.success) {
+      toast.error(formState.message);
     }
 
-    if (state && state.success) {
-      redirect("/signin");
+    if (formState.success) {
+      toast.success(formState.message);
+      router.replace("/signin");
     }
-  }, [state]);
+  }, [formState]);
 
   return (
     <>

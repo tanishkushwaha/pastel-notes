@@ -5,15 +5,21 @@ import { useFormState, useFormStatus } from "react-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { BarLoader } from "react-spinners";
 import { authSignIn } from "@/lib/actions";
+import { useRouter } from "next/navigation";
 
 export default function SigninForm() {
-  const [formState, formAction] = useFormState(authSignIn, {
-    error: false,
-  });
+  const router = useRouter();
+  const [formState, formAction] = useFormState(authSignIn, null);
 
   useEffect(() => {
-    if (formState && formState.error) {
-      toast.error("Invalid credentials");
+    if (formState && !formState.success) {
+      toast.error(formState.message);
+    }
+
+    if (formState?.success) {
+      toast.success(formState.message);
+
+      router.replace("/notes");
     }
   }, [formState]);
 

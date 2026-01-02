@@ -3,8 +3,9 @@
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import prisma from "./db";
 import { auth, signIn, signOut } from "@/lib/auth";
-import { isRedirectError } from "next/dist/client/components/redirect";
+import { redirect } from "next/navigation";
 import { hashPassword } from "./helpers";
+import { CredentialsSignin } from "next-auth";
 
 // Register
 export async function register(prevState: any, formData: FormData) {
@@ -12,7 +13,7 @@ export async function register(prevState: any, formData: FormData) {
     const password = formData.get("password") as string;
     const hashedPassword = await hashPassword(password);
 
-    const res = await prisma.user.create({
+    await prisma.user.create({
       data: {
         email: formData.get("email") as string,
         firstName: formData.get("firstName") as string,
@@ -21,11 +22,11 @@ export async function register(prevState: any, formData: FormData) {
       },
     });
 
-    if (res)
-      return {
-        success: true,
-        message: "User created successfully",
-      };
+    console.log("User created.");
+    return {
+      success: true,
+      message: "Registration Successful",
+    };
   } catch (error) {
     if (
       error instanceof PrismaClientKnownRequestError &&
@@ -33,9 +34,14 @@ export async function register(prevState: any, formData: FormData) {
     ) {
       return {
         success: false,
-        message: "Email already exists",
+        message: "Email Already Exists",
       };
     }
+    console.error(error);
+    return {
+      success: false,
+      message: "Internal Server Error.",
+    };
   }
 }
 
@@ -45,13 +51,29 @@ export async function authSignIn(prevState: any, formData: FormData) {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    await signIn("credentials", { email, password, redirectTo: "/notes" });
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    return {
+      success: true,
+      message: "Sign-in Successful",
+    };
   } catch (error) {
-    if (isRedirectError(error)) {
-      throw error;
-    } else {
-      return { error: true };
+    if (error instanceof CredentialsSignin) {
+      return {
+        success: false,
+        message: "Invalid Credentials",
+      };
     }
+
+    console.log(error);
+    return {
+      success: false,
+      message: "Internal Server Error",
+    };
   }
 }
 
